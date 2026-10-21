@@ -44,7 +44,7 @@ end
 
 # Design a function add-bad-year-column that, given a table with columns for year, costs, and revenues, adds a new column called "bad-year" that contains true if the costs exceed revenues for that year, and false otherwise.
 
-TableBY = table: year :: Number, cost :: Number, revenue :: Number
+#| TableBY = table: year :: Number, cost :: Number, revenue :: Number
   row: 1, 45, 50 
   row: 2, 100, 200 
   row: 3, 500, 2000
@@ -84,4 +84,63 @@ where:
   honor-student(get-row(Table, 1)) is false 
 end 
 
-is-honor-student = filter-with(Table, honor-student) 
+   is-honor-student = filter-with(Table, honor-student) |#
+
+
+
+
+fun find-drought-risk(t :: Table) -> Table: 
+  doc: "finds where regions have decreased rainfall from 2023 to 2024 and then makes a new table only containing those values" 
+  
+  fun filter-drought(r :: Row) -> Boolean: 
+    if 
+      get-column(r, "rainfall-2023") >= get-column(r, "rainfall-2024") : true 
+    else: 
+    false 
+    end 
+  end
+    
+    filter-with(t, filter-drought) 
+  where: 
+  rain-table = table: region :: String, rainfall-2023 :: Number, rainfall-2024 :: Number
+  row: "North America", 45, 60 
+  row: "South America", 70, 40 
+  row: "Asia", 45, 46 
+end 
+    
+    result = table: region :: String, rainfall-2023 :: Number, rainfall-2024 :: Number
+        row: "South America", 70, 40 
+    end 
+    
+    find-drought-risk(rain-table) is result
+  end 
+ 
+fun add-bad-year-column(t :: Table) -> Table: 
+  doc: "given a table, adds a column called 'bad-year' containing the word true if cost exceeded revenue and false if not"
+  
+  fun cost-revenue(r :: Row) -> Boolean: 
+    if
+    get-column(r, "cost") > get-column(r, "revenue") : true 
+    else: 
+      false 
+    end 
+  end
+    
+  build-column(t, "bad-year", cost-revenue) 
+  where: 
+    money-table = table: year, cost, revenue 
+      row: 2026, 45000, 75000
+      row: 2025, 51000, 50000
+      row: 2024, 90000, 45000
+    end 
+    
+    result = table: year, cost, revenue, bad-year
+      row: 2026, 45000, 75000, false 
+      row: 2025, 51000, 50000, true 
+      row: 2024, 90000, 45000, true 
+    end 
+    
+    add-bad-year-column(money-table) is result 
+  end
+ 
+  
