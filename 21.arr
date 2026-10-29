@@ -112,3 +112,8 @@ where:
   remove-3(nl-link(3, nl-empty)) is [list: ] 
   remove-3(nl-link(7, nl-link(3, nl-empty))) is [list: 7] 
 end 
+
+data NumListList: 
+  | nll-empty 
+  | nll-link(first :: NumList, rest :: NumListList)
+end 
